@@ -1,5 +1,3 @@
-# Makes a .csv text file of how many people join a discord server per day.
-
 import os
 import sys
 import discord     # requires pip install discord.py
@@ -9,7 +7,7 @@ intents = discord.Intents.default()
 intents.messages = True
 discord_bot = discord.Client(intents=intents)
 
-os.system('cls' if os.name == 'nt' else 'clear')
+os.system("cls" if os.name == "nt" else "clear")
 
 bot_token = "[bot token]"
 owner_id = [bot owner id number]
@@ -18,7 +16,7 @@ channel_with_joins_id = [id of the channel where join messages appear]
 
 @discord_bot.event
 async def on_ready():
-    print(f'{discord_bot.user} on ilmestynyt serverille! ^_^\n')
+    print(f"{discord_bot.user} on ilmestynyt serverille! ^_^\n")
 
     user = await discord_bot.fetch_user(owner_id)
     await discord_bot.wait_until_ready()
@@ -29,7 +27,6 @@ async def on_ready():
     join_data = {}  # dictionary with join date as key and usernames as values
 
     start_time = time.time()
-    progress_indicator = 0 
 
     async for message in channel.history(limit=None):
         if message.type == discord.MessageType.new_member:
@@ -37,16 +34,13 @@ async def on_ready():
             
             if date not in join_data:
                 join_data[date] = []
+                print("\n" + date, end="")
             
             join_data[date].append(message.author.display_name)
-            
-            # progress indicator
-            print('.', end='', flush=True)
-            progress_indicator += 1          
-            if progress_indicator % 50 == 0:
-                print()
+            print(".", end="")
 
-    with open("join_log.txt", 'w') as f:
+            
+    with open("join_log.txt", "w") as f:
         for date, users in join_data.items():
             f.write(f"{date},{len(users)},{','.join(users)}\n")
 
