@@ -3,16 +3,19 @@ import sys
 import discord     # requires pip install discord.py
 import time
 
+# config
+bot_token = "[bot token]"
+owner_id = [bot owner id number]
+server_id = [server id number]
+channel_with_joins_id = [id of the channel where join messages appear] 
+
+
+
 intents = discord.Intents.default()
 intents.messages = True
 discord_bot = discord.Client(intents=intents)
 
 os.system("cls" if os.name == "nt" else "clear")
-
-bot_token = "[bot token]"
-owner_id = [bot owner id number]
-server_id = [server id number]
-channel_with_joins_id = [id of the channel where join messages appear] 
 
 @discord_bot.event
 async def on_ready():
