@@ -67,7 +67,7 @@ async def on_ready():
     elapsed_time = end_time - start_time
     minutes = int(elapsed_time / 60)
     seconds = int(elapsed_time % 60)
-    print("\n\n#" + current_channel_name + ": " + str(sum([len(users) for users in join_data.values()])) + " join messages, retrieval time " + str(minutes) + "min " + str(seconds) + "s.")
+    print("\n\n#" + current_channel_name + ": retrieval time " + str(minutes) + "min " + str(seconds) + "s.")
 
 
     print("\n\nRemoving bots and bot-like people from the list: ", end="", flush=True)
