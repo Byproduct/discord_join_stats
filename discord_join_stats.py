@@ -2,6 +2,7 @@ import os
 import sys
 import discord     # requires pip install discord.py
 import time
+from datetime import datetime, timedelta
 
 # config
 bot_token = "[bot token]"
@@ -83,16 +84,44 @@ async def on_ready():
     for date in dates_to_remove:
         del join_data[date]
 
-    join_data = {date: join_data[date] for date in sorted(join_data)}
-
     total_joins = sum(len(users) for users in join_data.values())
     print("\n\nA total of " + str(total_joins) + " users have joined " + str(guild) + ".") 
 
+    # combine daily data into a separate monthly data set
+    join_data_monthly = {}
+    for date, users in join_data.items():
+        year_month = date[:7]      # 'YYYY-MM' portion of the date
+        if year_month not in join_data_monthly:
+            join_data_monthly[year_month] = []
+        join_data_monthly[year_month].extend(users)
+
+    # add empty months into the monthly data
+    dates = [datetime.strptime(date, "%Y-%m-%d") for date in join_data.keys()]
+    start_date = min(dates)
+    end_date = max(dates)
+    current_date = start_date
+    while current_date <= end_date:
+        year_month = current_date.strftime("%Y-%m")
+        if year_month not in join_data_monthly:
+            join_data_monthly[year_month] = []
+        current_date += timedelta(days=30)
+
+    # sort
+    join_data = {date: join_data[date] for date in sorted(join_data)}
+    join_data_monthly = {date: join_data_monthly[date] for date in sorted(join_data_monthly)}
+    
+
+    # write to files
     with open("join_log.txt", "w") as f:
         for date, users in join_data.items():
             f.write(f"{date},{len(users)},{','.join(users)}\n")
-    print("\n\njoin_log.txt written  ^ _^ _b\n\n")
 
+    with open("join_log_monthly.txt", "w") as f:
+        for date, users in join_data_monthly.items():
+            f.write(f"{date},{len(users)},{','.join(users)}\n")
+
+
+    print("\n\njoin_log.txt and join_log_monthly.txt written  ^ _^ _b\n\n")
 
     await discord_bot.close()
 
