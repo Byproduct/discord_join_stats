@@ -1,4 +1,4 @@
-Creates statistics (.csv) of people joining a discord server each day and each month 
+# Creates statistics (.csv) of people joining a discord server each day and each month 
 
 import os
 import sys
